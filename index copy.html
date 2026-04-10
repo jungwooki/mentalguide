@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPS 멘탈 파트 - 지도자용 종합코칭 가이드</title>
+    <!-- 프리텐다드 웹폰트 로드 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                        serif: ['Pretendard', 'serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        slate: {
+                            850: '#151e2e',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 20px rgba(14, 165, 233, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        
+        /* 애니메이션 */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 스크롤바 커스텀 (PC 환경) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* 탭 버튼 스타일 */
+        .nav-tab {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background-color: #0ea5e9;
+            transition: width 0.3s ease;
+            border-radius: 3px 3px 0 0;
+        }
+        .nav-tab.active {
+            color: #0ea5e9;
+            font-weight: 700;
+        }
+        .nav-tab.active::after {
+            width: 100%;
+        }
+
+        /* 카드 호버 이펙트 */
+        .index-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .index-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px -5px rgba(14, 165, 233, 0.1), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+            border-color: #bae6fd;
+        }
+        .index-card:hover .icon-box {
+            background-color: #0ea5e9;
+            color: white;
+        }
+
+        /* 모달 스타일 (PC 중앙 팝업) */
+        #modal-backdrop {
+            transition: opacity 0.3s ease-out;
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            background-color: rgba(15, 23, 42, 0.6);
+        }
+        #modal-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        #modal-container {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        #modal-container.active {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 점수 티어 라디오/탭 버튼 */
+        .tier-btn {
+            transition: all 0.2s;
+        }
+        .tier-btn.active {
+            background-color: #0ea5e9;
+            color: white;
+            border-color: #0ea5e9;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+        }
+        
+        /* 텍스트 가독성 */
+        .word-keep { word-break: keep-all; }
+        .bullet-list li {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0.25rem;
+            color: #0ea5e9;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight">MPS 멘탈 파트</h1>
+                        <p class="text-sm font-semibold text-primary-600 mt-0.5 tracking-wide">지도자용 종합코칭 가이드</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-500">
+                    <span class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200"><i class="fas fa-info-circle mr-1 text-slate-400"></i> 선수들의 점수를 클릭하여 맞춤형 지도 방식을 확인하세요.</span>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="flex gap-8 mt-2 overflow-x-auto hide-scrollbar">
+                <button onclick="switchTab('mps_base')" id="tab-mps_base" class="nav-tab active pb-4 text-[1.05rem] text-slate-500 hover:text-slate-800 font-medium whitespace-nowrap">
+                    <i class="fas fa-chart-radar mr-2"></i>MPS 5대 기본 지수
+                </button>
+                <button onclick="switchTab('mgi')" id="tab-mgi" class="nav-tab pb-4 text-[1.05rem] text-slate-500 hover:text-slate-800 font-medium whitespace-nowrap">
+                    <i class="fas fa-seedling mr-2"></i>MGI 멘탈 성장 지수
+                </button>
+                <button onclick="switchTab('additional')" id="tab-additional" class="nav-tab pb-4 text-[1.05rem] text-slate-500 hover:text-slate-800 font-medium whitespace-nowrap">
+                    <i class="fas fa-plus-circle mr-2"></i>8대 추가 멘탈 지수
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-6 lg:px-8 py-10 w-full">
+        
+        <!-- Section Title & Description -->
+        <div id="section-header" class="mb-8 fade-in">
+            <!-- Injected by JS -->
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12 fade-in">
+            <!-- Injected by JS -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-850 text-slate-400 py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center text-sm">
+            <p class="font-semibold text-slate-300 mb-2">Mental Performance System</p>
+            <p class="word-keep">본 가이드는 지도자가 선수의 심리 상태를 이해하고, 경기 및 훈련 상황에서 맞춤형 코칭을 제공할 수 있도록 돕기 위해 제작되었습니다.<br>선수의 점수는 고정된 것이 아니며, 적절한 피드백과 훈련을 통해 충분히 변화하고 성장할 수 있습니다.</p>
+        </div>
+    </footer>
+
+    <!-- PC Centric Modal -->
+    <div id="modal-backdrop" class="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-6" onclick="closeModal()">
+        
+        <div id="modal-container" class="bg-white w-full max-w-5xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+            
+            <!-- Modal Header -->
+            <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div class="flex items-center gap-3">
+                    <span id="modal-category-badge" class="px-2.5 py-1 bg-primary-100 text-primary-700 text-xs font-bold rounded-md tracking-wide">분류</span>
+                    <h2 id="modal-title" class="text-2xl font-extrabold text-slate-800 tracking-tight">지수 이름</h2>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full hover:bg-slate-200 text-slate-500 transition-colors flex items-center justify-center">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (2 Columns Layout) -->
+            <div class="flex flex-col lg:flex-row flex-grow overflow-hidden">
+                
+                <!-- Left Column: Overview (Fixed width on PC) -->
+                <div class="lg:w-1/3 border-b lg:border-b-0 lg:border-r border-slate-200 bg-white p-8 overflow-y-auto hide-scrollbar">
+                    <div class="mb-8">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fas fa-book-open"></i> 지수 의미</h3>
+                        <p id="modal-meaning" class="text-slate-700 leading-relaxed word-keep text-[0.95rem] bg-slate-50 p-4 rounded-xl border border-slate-100"></p>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fas fa-bolt"></i> 이럴 때 멘탈이 흔들려요</h3>
+                        <ul id="modal-struggles" class="bullet-list text-slate-600 text-[0.95rem] word-keep space-y-2"></ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-emerald-500 uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fas fa-lightbulb"></i> 선수를 위한 행동 가이드</h3>
+                        <ul id="modal-solutions" class="bullet-list text-slate-600 text-[0.95rem] word-keep space-y-2 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100"></ul>
+                    </div>
+                </div>
+
+                <!-- Right Column: Coach's Guide by Tier -->
+                <div class="lg:w-2/3 bg-slate-50/50 p-8 flex flex-col overflow-hidden">
+                    
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">해당 선수의 획득 점수 구간을 선택하세요</h3>
+                        <!-- Tier Selector -->
+                        <div class="grid grid-cols-5 gap-2" id="tier-selector">
+                            <!-- Injected by JS -->
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2 text-right"><i class="fas fa-info-circle"></i> 유럽 엘리트 유소년 평균을 기준으로 세분화된 맞춤형 가이드를 제공합니다.</p>
+                    </div>
+
+                    <!-- Tier Content Display -->
+                    <div class="flex-grow overflow-y-auto hide-scrollbar bg-white rounded-xl border border-slate-200 shadow-sm p-6" id="tier-content-container">
+                        <!-- Injected by JS -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data and Logic -->
+    <script>
+        // --------------------------------------------------------
+        // 1. 코칭 가이드 상세 데이터베이스
+        // --------------------------------------------------------
+        const mentalData = [
+            // ================== MPS 5대 기본 지수 ==================
+            {
+                id: 'mps_base_1',
+                category: 'mps_base',
+                badge: 'MPS 기본',
+                icon: 'fa-wind',
+                title: '경기 긴장 관리',
+                subtitle: '경기 긴장 및 멘탈 압박 대응 능력',
+                meaning: '이 지표는 선수가 경기 상황에서 겪는 긴장이나 압박을 얼마나 안정적으로 관리할 수 있는지를 나타냅니다. 중요한 경기에서도 자신의 플레이를 유지하는 능력의 척도입니다.',
+                struggle: ['경기에서 실수가 이어질 때', '결과가 기대만큼 나오지 않을 때', '중요한 경기(결승전, 선발전)에서 긴장이 올라갈 때'],
+                solution: ['경기 전 짧은 나만의 준비 루틴 만들기', '실수 후 자책하기보다 바로 다음 플레이에 집중하는 연습', '훈련 후 오늘 잘한 점 1가지 기록하여 자신감 채우기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 경기 상황에서 긴장이나 압박을 안정적으로 관리할 수 있습니다. 중요한 경기 상황에서도 자신의 플레이를 유지하는 능력이 있는 선수입니다.',
+                        observation: '강한 압박 상황에서도 볼을 받으려는 움직임이 유지됩니다. 실수 이후에도 플레이 리듬이 크게 흔들리지 않습니다. 중요한 순간에도 패스나 드리블 선택이 비교적 안정적으로 이루어집니다.',
+                        checkpoints: ['경기 초반과 후반의 플레이 안정성', '강한 압박 상황에서 패스 선택 안정성', '실수 이후 다음 플레이 참여 속도'],
+                        guide: '압박 상황 훈련에서 핵심 역할을 맡기면 좋습니다. 경기 상황 시뮬레이션 훈련을 통해 플레이 판단 경험을 지속적으로 늘려주는 것이 도움이 됩니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대부분 경기 상황에서 안정적인 플레이를 유지합니다. 다만 매우 중요한 경기 상황이나 예상치 못한 변수 앞에서는 긴장 반응이 나타날 수 있습니다.',
+                        observation: '일반적인 경기 상황에서는 안정적인 플레이를 보이지만, 중요한 경기나 강팀과의 대결 상황에서 플레이 속도가 다소 느려지거나 조심스러워질 수 있습니다.',
+                        checkpoints: ['경기 초반의 긴장 반응 및 풀리는 시간', '경기 후반 체력 저하 시 집중력 변화'],
+                        guide: '작은 경기 상황 훈련(Small Sided Games)을 반복적으로 실시하여 압박 내성을 기르는 것이 좋습니다. 경기 전 심리적 안정을 위한 루틴을 형성하도록 지도해 주세요.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '경기 긴장 반응이 상황(상대팀 수준, 경기 중요도)에 따라 기복 있게 나타날 수 있습니다. 엘리트 평균에 조금 못 미치는 수준입니다.',
+                        observation: '실수 이후 플레이 리듬이 잠시 흔들릴 수 있습니다. 강한 압박 상황에서 판단을 빨리 내리지 못하고 볼을 오래 소유하려는 모습이 나타날 수 있습니다.',
+                        checkpoints: ['실수 이후 플레이 참여 속도 저하 여부', '압박 상황에서 볼 처리 시간'],
+                        guide: '압박 상황을 포함한 소규모 게임 훈련을 통해 실전 같은 경기 경험을 늘리는 것이 좋습니다. 실수 이후에 취해야 할 "다음 플레이 행동"을 미리 명확히 정해 두는 지도가 도움이 됩니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '경기 압박 상황에서 긴장 반응이 실제 경기력 저하로 이어질 가능성이 높습니다. 잦은 경기 불안이 관찰됩니다.',
+                        observation: '실수 이후 위축되어 플레이 참여가 줄어들 수 있습니다. 경기 중 동료의 패스를 받으려는 움직임(오프더볼)이 눈에 띄게 감소할 수 있습니다.',
+                        checkpoints: ['실수 이후 위축되는 움직임 변화', '공을 피하거나 받으려는 적극성 감소'],
+                        guide: '훈련 시 패스를 많이 주고받는 환경을 만들어 볼 터치 경험과 자신감을 늘려주세요. 실수 이후 자책할 틈 없이 바로 다음 플레이를 하도록 행동 지침을 줍니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '수행 불안 가능성이 높으며, 경기 긴장 반응이 경기력에 매우 크게 부정적인 영향을 주고 있는 상태입니다.',
+                        observation: '압박 상황에서 눈에 띄게 플레이 참여를 회피할 수 있습니다. 한 번의 실수 이후 자신감이 완전히 무너져 경기 내내 본래 실력을 발휘하지 못할 수 있습니다.',
+                        checkpoints: ['경기 중 플레이 회피 및 숨는 행동', '패스 요구 움직임 실종', '신체적 긴장(경직된 움직임) 상태'],
+                        guide: '기술 지적보다는 경기 전 심호흡 등 호흡 조절 훈련과 루틴을 먼저 지도해야 합니다. 훈련 중 아주 작은 성공 경험이라도 반복적으로 칭찬하고 인정해주는 코칭이 필수적입니다.'
+                    }
+                ]
+            },
+            {
+                id: 'mps_base_2',
+                category: 'mps_base',
+                badge: 'MPS 기본',
+                icon: 'fa-users',
+                title: '주변 지원 환경',
+                subtitle: '팀 주변 지원 환경 및 사회적 지지',
+                meaning: '팀 동료와 코치와의 관계 속에서 도움을 주고받으며, 팀에 안정적으로 적응하고 소속감을 느끼는 능력을 의미합니다.',
+                struggle: ['팀에서 혼자라고 느껴지거나 겉돌 때', '도움을 요청하기가 눈치 보이고 어려울 때', '팀 친구들과의 경쟁이나 갈등으로 어색할 때'],
+                solution: ['훈련 전 팀 친구나 코치님께 먼저 밝게 인사하기', '모르는 것이나 궁금한 점이 생기면 혼자 고민하지 말고 코치님께 질문하기', '훈련 후 친구와 그날의 플레이에 대해 가볍게 이야기 나누기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 팀 환경에서 심리적으로 큰 안정감을 느끼며, 동료와 지도자에게 자연스럽게 도움을 요청할 수 있습니다. 팀 내 소속감이 매우 높습니다.',
+                        observation: '훈련 중 동료와 활발하게 소통합니다. 경기 중에도 자신 있게 패스를 요청하거나 동료에게 플레이 위치를 지시하는 리더십이 보입니다. 협력 플레이에 적극적입니다.',
+                        checkpoints: ['훈련 중 동료와의 소통 빈도', '경기 중 패스 요구 및 지시하는 목소리', '팀 전체 활동에서의 참여 태도'],
+                        guide: '소규모 게임 훈련에서 팀 협력 플레이를 주도하도록 역할을 강조하는 것이 좋습니다. 주장이나 서브 리더 등의 역할을 맡기면 소속감과 책임감이 더욱 긍정적으로 강화됩니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '선수는 팀 환경에 비교적 안정적으로 적응하고 있으며, 동료 및 지도자와의 협력 관계도 원만하고 대체로 긍정적입니다.',
+                        observation: '훈련 중 기본적인 의사소통이 잘 이루어집니다. 전술 훈련 등에서도 튀지 않고 팀 플레이에 자연스럽게 녹아들어 참여합니다.',
+                        checkpoints: ['경기 중 의사소통의 적극성', '훈련 중 동료를 돕거나 협력하는 행동'],
+                        guide: '훈련 중 동료와의 소통을 더 적극적으로 유도할 수 있는 질문을 하는 것이 좋습니다. 콤비네이션 플레이 훈련 빈도를 높여 팀 플레이 경험을 강화해 주세요.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '팀 환경에는 어느 정도 적응하고 있으나, 주도적이기보다는 수동적인 편이며 동료나 코치에게 선뜻 도움을 요청하는 행동은 제한적입니다.',
+                        observation: '훈련 참여는 성실히 하지만, 동료와의 사적인 소통이나 경기 중 전술적 대화가 적극적이지 않을 수 있습니다. 패스를 요구하는 목소리가 적습니다.',
+                        checkpoints: ['훈련 중 의사소통 행동', '경기 중 패스 요구 움직임 및 적극성'],
+                        guide: '소통이 반드시 필요한 훈련을 구성하는 것이 좋습니다. 패스 교환이 많고 파트너십이 필요한 훈련으로 팀 유대감을 높여주세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '선수는 팀 환경에서 소극적인 태도를 보일 수 있으며, 도움을 요청하는 행동이 적어 팀 소속감이 다소 부족할 수 있습니다.',
+                        observation: '훈련 중 동료와의 소통이 적고 혼자 있는 모습이 관찰될 수 있습니다. 경기 상황에서도 유기적인 플레이 참여가 줄어들 수 있습니다.',
+                        checkpoints: ['훈련 중 참여도 및 적극성', '동료와의 상호작용 및 고립 여부'],
+                        guide: '훈련에서 성향이 잘 맞는 특정 동료와 짝을 정해 반복적인 협력 플레이를 하도록 지도합니다. 선수에게 간단한 팀 역할을 부여하는 것도 큰 도움이 됩니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '선수가 팀 환경에서 심리적으로 크게 위축되어 있어 사회적 고립 가능성이 높습니다. 팀 소속감 형성에 각별한 지원이 필요합니다.',
+                        observation: '훈련 참여는 하지만 동료와의 상호작용이 극히 적을 수 있습니다. 경기 중에도 적극적으로 참여하지 않고 단절되어 있습니다.',
+                        checkpoints: ['팀 활동 참여 행동 및 표정', '훈련 중 소통 행동 여부'],
+                        guide: '작은 팀 훈련을 통해 협력 플레이 경험을 점진적으로 늘려갑니다. 비판보다는 긍정적인 피드백을 자주 제공하여 심리적 안정감을 먼저 주어야 합니다.'
+                    }
+                ]
+            },
+            {
+                id: 'mps_base_3',
+                category: 'mps_base',
+                badge: 'MPS 기본',
+                icon: 'fa-chess-knight',
+                title: '경기 준비 능력',
+                subtitle: '경기 준비 및 이미지 트레이닝 활용도',
+                meaning: '기술을 배우거나 경기를 앞두고 머릿속으로 상황을 미리 그리고 대비하는(심상 훈련) 능력입니다. 훈련 적응과 전술 이해의 핵심이 됩니다.',
+                struggle: ['새로운 전술이나 기술을 배울 때 바로 이해가 안 될 때', '경기 상황에 대한 예측 없이 몸만 무작정 움직일 때', '목표 없이 반복 훈련만 할 때'],
+                solution: ['경기장 들어가기 전 오늘 나의 좋은 플레이 장면 상상하기', '기술 연습 전, 코치님 시범 동작을 머릿속으로 3번 그려보기', '훈련 전 "오늘 나의 원픽 목표" 한 가지 정하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 경기 상황을 머릿속으로 미리 그려보고 스스로 플레이를 준비하는 능력이 매우 뛰어납니다. 전술 이해와 예측이 빨라 경기 흐름을 잘 읽습니다.',
+                        observation: '전술 설명 후 즉각적인 플레이 이해와 적용이 나타납니다. 볼을 받기 전에 미리 주변 상황을 확인하고 다음 플레이를 준비하는 움직임이 돋보입니다.',
+                        checkpoints: ['전술 설명 후 플레이 실행 속도', '볼을 받기 전 주변 상황 확인 행동', '공격 전개 상황에서 다음 움직임 준비'],
+                        guide: '훈련 전에 오늘 나올 경기 상황을 설명하여 미리 생각하게 하는 것이 좋습니다. 전술 훈련에서 플레이 장면을 머릿속으로 먼저 그려보도록 지도하면 더욱 발전합니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '선수는 경기 준비 과정이 비교적 안정적이며 전술 이해도도 좋은 편입니다. 경험이 쌓일수록 상황 예측 능력이 더 발전할 수 있습니다.',
+                        observation: '전술 훈련에서 기본적인 플레이 이해가 빠르게 이루어집니다. 패스를 받은 이후 다음 플레이 선택이 비교적 안정적으로 이루어집니다.',
+                        checkpoints: ['전술 설명 이해 속도', '패스 이후 다음 플레이 선택 속도'],
+                        guide: '훈련 중 플레이 상황을 질문 형식으로 설명하며 진행하는 것이 좋습니다. 스스로 생각하게 유도하면 상황 예측 능력이 크게 향상됩니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '선수는 기본적인 경기 준비 능력을 갖추고 있으나, 상황 예측 능력이나 플레이 준비 속도는 평균적인 수준에 머무릅니다.',
+                        observation: '전술 설명 이후 실제 플레이로 실행하기까지 시간이 조금 걸릴 수 있습니다. 볼을 받은 이후에 다음 플레이를 고민하느라 다소 지연되는 모습이 보입니다.',
+                        checkpoints: ['볼 받기 전 주변 확인 행동', '전술 설명 이후 플레이 실행 속도'],
+                        guide: '볼을 받기 전 주변 상황을 먼저 확인하도록 반복 지도해야 합니다. 작은 경기 상황 훈련을 통해 빠른 상황 인식과 예측 경험을 늘려주세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '선수는 경기 상황을 미리 준비하는 능력이 부족할 수 있습니다. 복잡한 전술 이해나 순간적인 상황 예측에 어려움을 느낍니다.',
+                        observation: '전술 설명 이후 플레이 실행이 늦어질 수 있습니다. 볼을 받은 이후 판단이 늦어져 압박을 당하면 쉽게 공을 빼앗길 수 있습니다.',
+                        checkpoints: ['전술 설명 이후 플레이 반응 속도', '볼 받은 이후 플레이 결정 시간'],
+                        guide: '전술 상황을 한 번에 설명하기보다 반복적이고 단순하게 설명하는 것이 좋습니다. 간단한 경기 상황 훈련을 통해 플레이 판단 경험을 천천히 늘려줍니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '선수는 경기 준비 과정에서 상황 예측이나 플레이 계획 능력이 현저히 부족하여 경기력 편차가 크게 발생할 수 있습니다.',
+                        observation: '경기 상황 이해가 매우 늦어질 수 있습니다. 볼을 받은 이후 어떤 플레이를 해야 할지 몰라 움직임이 제한되는 모습이 잦습니다.',
+                        checkpoints: ['전술 이해 속도', '플레이 선택 반응 시간'],
+                        guide: '단순한 말 설명보다는 시각적인 도구(전술판, 영상)를 활용하여 상황을 보여주는 것이 도움이 됩니다. 경기 장면을 상세히 설명하며 상황 자체를 이해하도록 지도하세요.'
+                    }
+                ]
+            },
+            {
+                id: 'mps_base_4',
+                category: 'mps_base',
+                badge: 'MPS 기본',
+                icon: 'fa-recycle',
+                title: '실수 후 회복력',
+                subtitle: '실패 후 멘탈 복귀 및 다음 플레이 전환력',
+                meaning: '경기 중 치명적인 실수나 실패를 경험했을 때, 그 감정에 매몰되지 않고 다시 집중력을 찾아 플레이로 돌아오는 회복 탄력성을 의미합니다.',
+                struggle: ['자신의 실수로 실점하거나 흐름이 끊겼을 때', '실수 장면이 계속 머릿속에 맴돌 때', '주변의 질책이나 반응이 두려워 움츠러들 때'],
+                solution: ['실수 후 손뼉을 치며 "리셋!" 외치기', '실수를 고민할 틈 없이 바로 수비나 빈 공간으로 뛰어들기', '실패를 "다음에 보완할 연습 과제"로 관점 바꾸기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 실수 이후에도 감정의 동요 없이 매우 빠르게 다음 플레이에 집중합니다. 멘탈 회복 속도가 탁월하여 팀 분위기 유지에 큰 기여를 합니다.',
+                        observation: '패스 미스 직후 멈춰 서기보다 즉각적으로 수비 전환 압박에 들어갑니다. 실수 이후에도 볼을 피하지 않고 계속 플레이에 관여합니다.',
+                        checkpoints: ['실수 이후 다음 플레이 참여 속도', '실수 이후 볼 요구 움직임', '실수 이후 플레이 선택의 자신감'],
+                        guide: '실수 이후 바로 다음 플레이에 참여하는 태도를 적극적으로 칭찬해 주세요. 과감한 도전을 허용하여 회복 탄력성을 팀의 긍정적 모델로 만들어주시면 좋습니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '선수는 대체로 실수 후 빠르게 플레이에 다시 집중할 수 있습니다. 다만, 경기의 중요도나 실수의 크기에 따라 회복 시간이 조금 길어질 수는 있습니다.',
+                        observation: '실수 직후 잠시 리듬이 끊길 수는 있지만 이내 경기 흐름으로 정상 복귀합니다. 큰 경기가 아니라면 실수가 경기력에 지속적인 악영향을 주지 않습니다.',
+                        checkpoints: ['실수 이후 플레이 복귀에 걸리는 시간', '실수 이후 플레이 적극성'],
+                        guide: '실수 이후 취해야 할 구체적인 행동 지침(예: "바로 압박해!", "다음 패스 위치 잡아!")을 미리 정해 두어 고민할 틈을 주지 않는 것이 효과적입니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '선수는 실수 이후 멘탈을 완전히 회복하는 데 약간의 시간이 필요합니다. 상황에 따라 일시적으로 자신감이 하락하는 모습을 보입니다.',
+                        observation: '실수 이후 움직임 템포가 잠시 줄어듭니다. 이후 다음 플레이 참여까지 시간이 걸리거나 안전지향적인 패스로 소극적인 플레이를 하기도 합니다.',
+                        checkpoints: ['실수 이후 움직임 감소 여부', '실수 이후 플레이 참여 속도'],
+                        guide: '실수 이후 바로 다음 플레이를 하도록 반복적으로 지시해야 합니다. 작은 게임 훈련에서 실수 후의 행동 루틴을 지속적으로 체화시켜 주는 것이 중요합니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '선수는 실수 이후 실패에 대한 집착으로 플레이 자신감이 크게 떨어질 가능성이 높습니다. 멘탈 회복이 지연되어 경기력에 악영향을 줍니다.',
+                        observation: '실수 이후 볼을 받으려는 움직임이 눈에 띄게 줄어듭니다. 동료의 눈치를 살피며, 플레이 참여가 매우 소극적으로 변할 수 있습니다.',
+                        checkpoints: ['실수 이후 플레이 회피 행동', '패스 요구 움직임의 급격한 감소'],
+                        guide: '실수 이후 즉시 다시 볼을 받을 수 있는 환경을 조성해 주어야 합니다. 작은 성공 경험을 바로바로 덮어씌워 주어 자신감을 잃지 않도록 이끌어주세요.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '선수는 실수 이후 멘탈 붕괴 상태에 빠지기 쉬우며 심리적 회복을 자력으로 해내기 매우 어렵습니다.',
+                        observation: '한 번의 실수 후 완전히 위축되어 경기장 내에서 고립되는 모습이 나타납니다. 잇단 실수가 이어지며 자신감이 바닥으로 떨어질 수 있습니다.',
+                        checkpoints: ['실수 이후 플레이 참여 급감', '경기 중 자신감 및 태도 변화'],
+                        guide: '실수 이후 즉각적인 다음 플레이 지시를 명확히 내려 행동의 공백을 없애야 합니다. 기술 지적보다는 심리적인 안정을 주는 격려가 우선되어야 합니다.'
+                    }
+                ]
+            },
+            {
+                id: 'mps_base_5',
+                category: 'mps_base',
+                badge: 'MPS 기본',
+                icon: 'fa-bullseye',
+                title: '집중 자기조절력',
+                subtitle: '감정 통제 및 일관된 집중력 유지',
+                meaning: '훈련이나 경기 중 짜증, 분노, 좌절 등 불필요한 감정 기복을 통제하고, 끝까지 훈련의 본질과 자신의 임무에 집중하는 능력을 의미합니다.',
+                struggle: ['심판의 불리한 판정이 나올 때', '상대 선수의 거친 파울이나 도발이 있을 때', '경기가 뜻대로 풀리지 않아 화가 날 때'],
+                solution: ['감정이 올라올 때 10초간 속으로 숫자 세며 호흡하기', '심판이나 상황을 탓하기보다 나의 다음 플레이에만 집중하기', '긍정적인 자기 암시("할 수 있어") 하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 경기와 훈련에서 집중력을 매우 안정적으로 유지하며, 스스로 감정과 플레이를 훌륭하게 조절할 수 있습니다.',
+                        observation: '훈련 중 오랜 시간 집중 상태가 유지됩니다. 외부 자극이나 불리한 판정에도 감정 반응보다 냉정한 플레이 판단이 먼저 이루어집니다.',
+                        checkpoints: ['훈련 중 집중 지속 시간', '전술 지시 이후 플레이 실행 속도', '경기 중 감정 반응 변화'],
+                        guide: '전술 이해가 깊이 필요한 훈련에서 판단 역할을 맡기면 집중 능력이 더욱 빛을 발합니다. 팀의 중심을 잡아주는 리더의 역할을 부여해도 좋습니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '선수는 대체로 안정적인 집중력과 통제력을 유지합니다. 다만 체력이 떨어지거나 극한 상황에서는 일시적으로 흔들릴 수 있습니다.',
+                        observation: '기본적인 훈련 참여 태도는 매우 훌륭합니다. 하지만 강도가 높고 긴 훈련 상황에서는 후반부에 집중력이 다소 떨어지는 모습이 관찰됩니다.',
+                        checkpoints: ['훈련 후반 집중력 변화', '전술 지시 이후 플레이 반응'],
+                        guide: '훈련의 목표를 명확하게 제시하여 주의를 환기시켜 주는 것이 좋습니다. 집중력이 끊기지 않도록 짧고 밀도 있는 훈련을 반복하는 것이 도움 됩니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '선수의 집중력과 자기 조절 능력은 평범한 수준입니다. 그날의 컨디션이나 외부 요인에 따라 훈련 집중도가 달라질 수 있습니다.',
+                        observation: '훈련 중 집중 시간이 일정하지 않을 수 있습니다. 뜻대로 풀리지 않으면 조급해져서 지시 사항을 깜빡하고 감정적인 플레이를 하기도 합니다.',
+                        checkpoints: ['훈련 집중 지속 시간', '전술 이해 이후 플레이 실행 속도'],
+                        guide: '훈련 시작 전 구체적인 목표 하나를 각인시켜 주는 것이 좋습니다. 집중을 요하는 짧은 훈련을 반복하여 스스로 템포를 조절하게끔 유도하세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '선수는 경기와 훈련에서 감정 통제에 어려움을 느끼며 집중력이 쉽게 흔들릴 가능성이 높습니다.',
+                        observation: '훈련 중 장난이 심하거나 집중력이 자주 끊깁니다. 경기 상황에서 분노나 짜증 같은 감정 반응이 플레이 판단을 흐리게 만듭니다.',
+                        checkpoints: ['훈련 중 집중력 변화 및 산만함', '감정 반응 이후 플레이 및 태도 변화'],
+                        guide: '훈련 목표를 매우 짧은 단위로 쪼개어 제시하는 것이 효율적입니다. 감정이 격해질 때는 잠시 벤치로 불러 쿨다운의 시간을 주어야 합니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '선수는 집중 유지와 자기 감정 조절에 매우 큰 어려움을 겪고 있으며, 이는 성장을 가로막는 주요 원인이 될 수 있습니다.',
+                        observation: '훈련 중 집중이 흩어지는 빈도가 매우 잦습니다. 감정이 앞서 코치의 전술 지시를 무시하거나 거친 파울을 범하는 돌발 행동이 나타날 수 있습니다.',
+                        checkpoints: ['훈련 집중 지속 시간', '전술 이해 이후 플레이 실행 속도', '과격한 감정 표출 여부'],
+                        guide: '명확한 규칙과 규율을 인지시키고, 기술적인 훈련 이전에 훈련에 임하는 태도와 책임감을 길러주는 멘탈 코칭이 절대적으로 우선되어야 합니다.'
+                    }
+                ]
+            },
+
+            // ================== MGI (멘탈 성장 지수) ==================
+            {
+                id: 'mgi_1',
+                category: 'mgi',
+                badge: 'MGI',
+                icon: 'fa-chart-line',
+                title: 'MGI 멘탈 성장 지수',
+                subtitle: '잠재력, 훈련 적응 및 장기적 성장 가능성',
+                meaning: 'MPS 5요인 중 성장과 직결되는 긴장관리, 실수회복, 준비능력, 자기조절력을 조합하여, 미래의 엘리트 레벨로 얼마나 올바르게 성장할 수 있는지를 평가하는 지표입니다.',
+                struggle: ['왜 이 힘든 훈련을 해야 하는지 동기 부여가 안 될 때', '기본기 반복 훈련이 지루하고 목표 의식이 흐려질 때', '재능만 믿고 노력의 가치를 가볍게 여길 때'],
+                solution: ['당장 오늘 달성할 수 있는 훈련의 작은 목표 세우기', '코치님의 피드백을 수용하고 실행하기 위해 노력하기', '실패를 성장을 위한 자연스러운 과정으로 받아들이기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 새로운 기술과 경험을 통해 끊임없이 스스로 성장하려는 태도가 매우 강합니다. 피드백을 적극 수용하는 최상위 유망주 태도입니다.',
+                        observation: '훈련 중 새로운 기술이나 플레이를 두려움 없이 적극적으로 시도합니다. 코치의 피드백 즉시 플레이를 수정하며, 실패에도 재차 도전합니다.',
+                        checkpoints: ['피드백 이후 플레이 변화', '훈련 중 새로운 시도 행동', '실패 이후 재도전 행동'],
+                        guide: '스스로 목표를 설정하게 하고 주도적인 역할을 부여하세요. 난이도가 높은 훈련 과제나 상위 연령대와의 훈련(월반)을 통해 성장을 가속화할 수 있습니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '선수는 훈련에 임하는 태도가 진지하며 성장에 대한 열의가 안정적으로 형성되어 있습니다. 코칭을 통해 빠르게 발전할 잠재력이 높습니다.',
+                        observation: '훈련 참여 태도가 훌륭하며, 코치의 지시를 잘 이해하고 수행하려 노력합니다. 새로운 훈련 과제 앞에서도 포기하지 않고 끈기를 보여줍니다.',
+                        checkpoints: ['훈련 참여 태도 및 성실성', '피드백 수용 및 적용 행동'],
+                        guide: '훈련의 목적과 이유를 명확히 설명해 주면 동기부여가 극대화됩니다. 기술적인 발전 과정을 칭찬과 함께 구체적으로 인지시켜 주세요.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '선수는 성장에 대한 기본 의지는 있으나, 코칭 상황이나 개인 기분에 따라 훈련 동기와 몰입도가 수동적으로 변할 수 있습니다.',
+                        observation: '지시된 훈련은 잘 따르지만, 스스로 새로운 시도를 하는 창의적인 도전은 부족합니다. 벽에 부딪히면 스스로 극복하기보다 도움을 기다리는 경향이 있습니다.',
+                        checkpoints: ['훈련 중 자발적 도전 행동 여부', '실패 이후 재도전 행동 지연'],
+                        guide: '정답을 바로 주기보다 해결책을 유도하는 질문을 던져 스스로 생각하는 힘을 길러주세요. 훈련 목표를 작게 나누어 성공 경험을 자주 맛보게 해야 합니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '선수의 성장 동기와 훈련 태도가 일정하지 않아 코칭 환경에 따라 발전 속도가 크게 지연될 위험이 있습니다.',
+                        observation: '기본기 훈련을 지루해하며 대충 넘어가는 태도가 관찰될 수 있습니다. 실패 이후 도전을 포기하거나, 피드백을 받아도 행동의 변화가 즉각 나타나지 않습니다.',
+                        checkpoints: ['훈련 집중 시간 및 딴짓 여부', '훈련 참여 태도 변화'],
+                        guide: '단순하고 명확한 훈련 과제를 제시하고 달성 여부만 철저히 체크하세요. 칭찬 빈도를 높여 훈련 자체에 대한 긍정적인 흥미부터 유발해야 합니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '선수의 성장 동기와 학습 태도가 바닥에 가까워 지속적이고 세밀한 멘탈 코칭과 지원이 절대적으로 필요한 상태입니다.',
+                        observation: '훈련 참여 태도가 눈에 띄게 낮으며 훈련을 의무 방어전처럼 수행합니다. 새로운 시도는 전무하며, 심리적인 소진(Burnout) 징후가 있을 수 있습니다.',
+                        checkpoints: ['훈련 거부 또는 무기력증', '훈련 중 적극적인 도전 행동의 완전한 부재'],
+                        guide: '강압적인 기술 훈련 압박은 역효과를 냅니다. 개별적인 깊은 면담을 통해 흥미 상실의 원인을 파악하고, 단기적인 성취와 즐거움을 줄 수 있는 접근이 시급합니다.'
+                    }
+                ]
+            },
+
+            // ================== 8대 추가 지수 ==================
+            {
+                id: 'add_1',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-balance-scale',
+                title: '경기 안정성 지수',
+                subtitle: '실전 압박 극복 및 멘탈 흔들림 방어력',
+                meaning: '경기 중 치명적인 실수가 발생하거나 흐름이 불리해지는 강한 압박 속에서도, 멘탈이 무너지지 않고 끝까지 본인의 기량을 유지하는 능력을 의미합니다.',
+                struggle: ['경기 초반에 생각지 못한 어이없는 실수를 범했을 때', '상대 선수의 피지컬이나 실력이 월등히 압도적이라고 느껴질 때', '경기 흐름이 완전히 상대편으로 넘어가 버렸을 때'],
+                solution: ['실수 직후 "다음 공!" 등 나만의 리셋 키워드 마음속으로 외치기', '경기가 안 풀릴 때 일단 내가 맡은 기본 수비 위치부터 철저히 지키기', '경기장에 들어가기 전 호흡을 가다듬으며 평정심 유지하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 실전의 강한 압박 상황 속에서도 놀라운 집중력을 유지합니다. 어떠한 흔들림에도 빠르게 경기 흐름을 되찾아오는 훌륭한 경기 안정성을 지녔습니다.',
+                        observation: '강한 압박과 몸싸움 속에서도 실수에 얽매이지 않고 다음 동작을 차분히 이어갑니다. 중요한 결승전 같은 큰 무대에서도 평소와 다름없는 안정적인 퍼포먼스를 선보입니다.',
+                        checkpoints: ['강팀과의 경기 시 플레이 대처 능력', '실점 직후의 플레이 리듬 회복 속도'],
+                        guide: '위기 상황에서 팀의 밸런스를 잡아주는 역할을 부여하여 장점을 극대화합니다. 실전과 같은 시뮬레이션 훈련에서 중심 역할을 맡겨 경기 주도 경험을 쌓게 해주세요.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대체로 안정적인 경기 집중력과 멘탈 방어력을 보여줍니다. 일반적인 상황에서는 훌륭하지만, 예상치 못한 아주 중대한 변수 앞에서는 약간 흔들릴 수 있습니다.',
+                        observation: '평소에는 안정적이나 매우 거친 플레이를 하는 상대를 만나거나 연속된 실수를 범할 경우, 플레이가 다소 소극적이고 안전지향적으로 변하는 모습이 나타납니다.',
+                        checkpoints: ['경기 분위기가 과열되었을 때의 대처', '거친 상대방을 마주했을 때의 자신감 변화'],
+                        guide: '실전과 아주 유사하고 불리한 상황을 조성한 미니게임을 통해 압박 내성을 조금 더 끌어올려 주면 완벽한 강점으로 승화시킬 수 있습니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '경기 안정성이 상황에 따라 다르게 나타납니다. 편안한 경기에서는 잘하지만 압박감이 큰 경기에서는 실력 발휘에 애를 먹는 기복이 있습니다.',
+                        observation: '특정 상황(어이없는 실수, 판정 불만, 강한 압박)에서 집중력이 흩어져 플레이 흐름이 끊기는 모습이 관찰됩니다. 심리적으로 흔들리면 볼 터치가 거칠어집니다.',
+                        checkpoints: ['득점 및 실점 상황 전후의 플레이 일관성', '실수 이후 볼 처리의 섬세함 저하 여부'],
+                        guide: '경기장 안에서 심리적 안정을 스스로 찾을 수 있는 단순한 루틴(예: 신발끈 고쳐 매기, 심호흡)을 도입하고 훈련 때부터 체화시키는 것이 좋습니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '경기 중 작은 실수나 압박 상황에도 멘탈이 크게 흔들리며, 이로 인해 집중력이 무너져 본래의 기량을 전혀 발휘하지 못할 위험이 있습니다.',
+                        observation: '경기가 풀리지 않으면 당황하여 잦은 패스 미스를 남발합니다. 멘탈이 무너져 경기를 포기한 듯한 제스처나 극도로 위축된 모습을 보이기도 합니다.',
+                        checkpoints: ['연속된 실수 시 위축되는 정도', '어려운 경기에서 볼을 기피하는 현상'],
+                        guide: '경기 전 철저한 멘탈 준비 루틴을 만들어주어야 합니다. 경기 중 흔들릴 때 코치가 즉각적이고 아주 단순한 지시 하나만 내려주어 복잡한 생각을 지워주세요.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '실전 압박에 대한 면역력이 현저히 낮아 경기 상황의 긴장감이나 실수가 곧바로 경기력 붕괴로 직결되는 심각한 상태입니다.',
+                        observation: '상대의 압박이 들어오면 지레 겁을 먹고 볼을 회피하거나 빼앗깁니다. 경기 내내 투명인간처럼 고립되어 팀에 기여하지 못할 수 있습니다.',
+                        checkpoints: ['극도의 긴장감에 따른 신체적 굳어짐', '플레이 회피 및 경기장 내 고립'],
+                        guide: '기술적인 지적은 일절 삼가고, 경기 상황에 대한 두려움을 없애는 데 주력해야 합니다. 연습 경기에서조차 비난 없는 환경을 만들어 잃어버린 자신감을 되찾게 하는 것이 최우선입니다.'
+                    }
+                ]
+            },
+            {
+                id: 'add_2',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-heartbeat',
+                title: '심리 안정성 지수',
+                subtitle: '번아웃 예방 및 스트레스 대처 능력',
+                meaning: '훈련의 피로, 결과에 대한 걱정, 대인 관계 스트레스 등이 발생했을 때 마음을 안정시키고 스스로 회복하는 능력이며, 멘탈 번아웃(Burnout)의 조기 경보 지표입니다.',
+                struggle: ['경기나 훈련 결과에 대한 걱정이 머릿속을 떠나지 않아 잠을 설칠 때', '신체적인 피로와 심리적인 부담감이 동시에 몰려올 때', '이유 없이 우울해지거나 훈련에 흥미를 잃었을 때'],
+                solution: ['잠들기 전 긍정적인 자기 암시와 함께 오늘 좋았던 일 1가지 떠올리기', '머릿속을 맴도는 막연한 걱정들을 종이에 한 줄씩 적어 덜어내기', '축구가 아닌 다른 가벼운 취미나 휴식을 통해 환기하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수의 전반적인 정서가 매우 건강하고 안정적입니다. 일상이나 훈련에서의 스트레스를 스스로 훌륭하게 관리하며 번아웃 위험이 지극히 낮습니다.',
+                        observation: '고강도 훈련의 피로나 경기 패배의 스트레스를 스스로 잘 소화하고 해소합니다. 훈련장에 항상 긍정적이고 활기찬 에너지로 나옵니다.',
+                        checkpoints: ['힘든 훈련 직후의 긍정적인 감정 상태', '훈련 외 일상적인 밝은 태도 유지'],
+                        guide: '현재 선수가 가진 건강한 스트레스 해소 루틴을 칭찬하고, 지금의 밝은 상태를 계속 유지할 수 있도록 정서적인 지지를 보내주세요.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '일반적이고 건강한 수준의 심리적 안정감을 보여줍니다. 다만 피로도가 장기간 쌓이거나 결과 압박이 커지면 일시적인 스트레스 반응을 보일 수 있습니다.',
+                        observation: '체력 훈련이 매우 고되거나 성적이 나오지 않을 때 다소 표정이 어두워지지만, 휴식이나 가벼운 대화를 통해 이내 본래의 컨디션으로 회복합니다.',
+                        checkpoints: ['고강도 훈련 후의 감정 회복 속도', '결과에 대한 스트레스 표출 여부'],
+                        guide: '육체적 피로가 심리적 스트레스로 이어지지 않도록 적절한 휴식과 회복 훈련의 중요성을 인지시켜 줍니다. 잘 쉬는 것도 훈련임을 가르쳐 주세요.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '스트레스와 피로감에 일정 부분 취약성을 보입니다. 주변의 높은 요구나 기대, 지속적인 훈련 결과에 따라 심리적 피로를 제법 느낄 수 있습니다.',
+                        observation: '훈련이 뜻대로 안 될 때 유독 걱정하는 모습이 잦고 의기소침해집니다. 컨디션의 난조가 멘탈 저하로 쉽게 이어지며 훈련 집중력이 간헐적으로 저하됩니다.',
+                        checkpoints: ['결과가 좋지 않은 날의 수면 상태나 태도', '컨디션 난조 시의 급격한 기분 변화'],
+                        guide: '경기 및 훈련 결과에 대한 압박감을 지도자가 먼저 덜어주어야 합니다. 성과보다는 "포기하지 않고 뛰었던 태도" 과정 위주로 칭찬을 건네주세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '선수에게서 심리적 피로와 불안 신호가 뚜렷하게 나타나고 있습니다. 적절한 조치가 없다면 심각한 번아웃으로 진행될 우려가 있는 단계입니다.',
+                        observation: '훈련에 뚜렷한 흥미를 잃은 듯한 표정이 잦으며, 활력이 떨어집니다. 작은 일에도 짜증을 내거나 원인 모를 컨디션 저하를 자주 호소합니다.',
+                        checkpoints: ['훈련 참여에 대한 수동적 태도', '활력 상실 및 신경질적 반응 증가'],
+                        guide: '훈련 강도를 의도적으로 조절해 주고 완벽한 휴식 일을 보장해 주세요. 개인 면담을 통해 선수를 억누르고 있는 불안이나 스트레스 요소를 파악하는 것이 시급합니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '매우 심각한 정서적 불안 및 번아웃 위험 상태입니다. 축구라는 스포츠 자체에 대한 동력을 상실할 수 있는 위험한 적신호입니다.',
+                        observation: '무기력하게 훈련에 임하거나, 불면증 호소, 잦은 지각, 혹은 신체화 증상(원인 없는 복통, 근육통)을 핑계로 훈련을 회피하려는 극단적 행동을 보일 수 있습니다.',
+                        checkpoints: ['심각한 무기력증 및 훈련 이탈 징후', '정서적 고갈과 신체 통증 호소'],
+                        guide: '훈련의 양보다는 선수의 멘탈 회복이 최우선 과제입니다. 지도자의 짐을 잠시 내려놓고 심리 전문가의 개입이나 따뜻한 지지, 완벽한 휴식을 통한 케어가 절대적으로 필요합니다.'
+                    }
+                ]
+            },
+            {
+                id: 'add_3',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-shield-halved',
+                title: '평가 독립성 지수',
+                subtitle: '외부 시선 극복 및 자기 확신력',
+                meaning: '부모님, 지도자, 관중 등 외부의 평가나 시선에 얽매이지 않고 오롯이 자신의 플레이 기준과 직관에 집중할 수 있는 멘탈의 단단함을 의미합니다.',
+                struggle: ['부모님이나 코치님의 시선이 너무 의식되어 눈치가 보일 때', '실수 후 주변에서 탄식이 나오거나 나를 쳐다보는 것 같을 때', '잘해야만 사랑받고 인정받는다는 심리적 부담감이 클 때'],
+                solution: ['내 플레이의 채점 기준을 타인의 평가가 아닌 "나의 성실함"에 두기', '경기 중 관중석이나 벤치 쪽을 불필요하게 쳐다보지 않기', '외부 소음 차단! 오직 볼과 동료의 움직임에만 시선 집중하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '타인의 평가에 흔들리지 않고 독립적인 경기 태도가 확고하게 자리 잡힌 "강심장"입니다. 큰 무대에서도 본인 플레이를 할 수 있습니다.',
+                        observation: '코치의 강한 지적이나 호통 이후에도 위축되지 않고 자신의 플레이를 꿋꿋이 펼칩니다. 관중이 많거나 부모님이 지켜보는 경기에서도 평소 실력을 100% 발휘합니다.',
+                        checkpoints: ['지적이나 실수 직후 플레이의 대담성 유지', '중요한 시합(관중 압박)에서의 퍼포먼스 저하 없음'],
+                        guide: '선수의 자율성을 최대한 보장해 주세요. 세세한 마이크로 코칭보다는 전술의 큰 틀과 역할만 부여하고 스스로 판단하여 플레이하게 할 때 결과가 좋습니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대체로 외부 평가에 안정적으로 대응하지만, 매우 권위적인 지도자의 지적이나 결정적인 실수 앞에서는 약간의 눈치를 살필 수 있습니다.',
+                        observation: '코치의 피드백을 수용하지만, 가끔 지적을 받은 직후 돌파보다는 안전지향적인 패스로 플레이가 다소 소극적으로 변하는 모습이 관찰됩니다.',
+                        checkpoints: ['지적 후 공격적 성향의 위축 여부', '벤치의 반응을 살피는 시선의 빈도'],
+                        guide: '결과보다는 과감하게 시도했던 과정을 강하게 칭찬해 주어야 합니다. 피드백을 전달할 때는 감정적 톤을 낮추고 객관적인 움직임 위주로 코칭해 주세요.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '지도자나 부모님의 칭찬과 지적에 따라 그날의 컨디션과 멘탈이 크게 좌우되는 기분파 성향을 보입니다. 타인의 인정에 목말라 있습니다.',
+                        observation: '칭찬을 받으면 신나서 뛰지만, 한 번 강한 지적을 받으면 어깨가 처지고 움직임이 현저히 둔해집니다. 화려한 플레이로 무리하게 증명하려는 성향도 보입니다.',
+                        checkpoints: ['분위기(칭찬/질책)에 따른 활동량 및 태도 편차', '보여주기 식 무리한 플레이 남발 여부'],
+                        guide: '"참 잘했다"는 막연한 칭찬 대신 "방금 턴이 좋았다" 식의 구체적이고 기술적인 피드백을 제공하여, 타인의 잣대가 아닌 스스로의 기술에 자부심을 갖게 유도하세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '외부 평가와 시선에 매우 예민하게 반응합니다. 주변의 눈치를 보느라 본인의 창의적인 플레이는 실종되고 기계적인 움직임만 남게 될 수 있습니다.',
+                        observation: '실수를 하면 가장 먼저 벤치나 관중석을 불안하게 쳐다봅니다. 혼나지 않기 위해 공을 잡자마자 급하게 동료에게 떠넘기듯 책임 전가성 패스를 합니다.',
+                        checkpoints: ['벤치를 힐끗거리는 불안한 행동 빈도', '공을 받는 것을 두려워하는 모습'],
+                        guide: '선수가 내린 판단 자체를 존중해 주는 접근이 절실합니다. 결과론적으로 다그치지 말고, "왜 그런 선택을 했는지" 판단의 근거를 부드럽게 먼저 물어봐 주세요.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '평가 의존도가 극도로 높아 비난에 대한 공포에 사로잡혀 있습니다. 스스로 어떤 판단도 내리지 못하는 심리적 마비 상태에 가깝습니다.',
+                        observation: '지시가 구체적으로 떨어지지 않으면 제대로 움직이지 못합니다. 경기장 안에서 패닉 상태를 보이며, 작은 지적에도 쉽게 무너지거나 눈물을 보일 수 있습니다.',
+                        checkpoints: ['지시 없이는 멈춰 있는 수동적 행동(Freezing)', '과도한 불안 반응 및 자책감 표출'],
+                        guide: '부모님의 과도한 관여를 일시적으로 차단하는 등의 조치가 필요할 수 있습니다. 어떠한 비난도 없는 완벽히 안전한 훈련 분위기 속에서 플레이 시도 그 자체만을 극찬해 주세요.'
+                    }
+                ]
+            },
+            {
+                id: 'add_4',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-book-reader',
+                title: '자기조절 학습 지수',
+                subtitle: '훈련 목표 설정 및 능동적 피드백 수용력',
+                meaning: '코치가 시키는 훈련만 수동적으로 하는 것이 아니라, 스스로 목표를 세우고 부족한 점을 점검하며 개선책을 찾아 훈련에 적용하는 훌륭한 엘리트 학습 능력입니다.',
+                struggle: ['왜 이 훈련을 반복해야 하는지 이유를 납득하지 못할 때', '코치님의 설명이 나의 실제 문제점과 연결되지 않는다고 느낄 때', '실패 원인을 분석하지 않고 막무가내로 똑같이 부딪힐 때'],
+                solution: ['훈련 전 나만의 개인 훈련일지 3줄 작성하는 습관 들이기', '코치님의 전술 피드백을 내 포지션에 맞게 적용시켜 한 번 더 생각하기', '연습 경기 후 잘된 점과 보완할 점 스스로 복기하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '스스로 훈련을 계획하고 통제하며 모니터링하는 자기주도성이 완벽에 가까운 최상위권 엘리트 학습 능력을 보유하고 있습니다.',
+                        observation: '훈련 목표를 누구보다 빠르게 캐치하고 실전에 적용합니다. 실수 시 원인을 스스로 인지하고, 다음 턴에 폼이나 움직임을 능동적으로 수정해 나옵니다.',
+                        checkpoints: ['훈련 설명의 빠른 이해도 및 즉각적인 적용', '실패 후 스스로 교정하는 능동적 피드백 수용'],
+                        guide: '답을 던져주는 티칭(Teaching)은 멈추고 깊이 있는 질문을 던지는 코칭(Coaching)을 진행하세요. 선수가 스스로 전술 전략을 짜게 하고 조력자 역할만 해주어도 훌륭히 해냅니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대체로 우수한 훈련 적응력을 지니고 있으며, 훈련의 목적을 이해하고 스스로 개선하려는 학습 태도가 몸에 잘 배어 있습니다.',
+                        observation: '반복 훈련을 통해 스스로의 문제점을 파악하고 점진적으로 나아집니다. 코치의 지시를 기계적으로 따르기보다 의도를 이해한 후 움직입니다.',
+                        checkpoints: ['반복 훈련을 통한 확실한 성취도 상승', '훈련 집중 지속도 및 탐구적인 태도'],
+                        guide: '매 세션마다 "이 훈련을 왜 하는지" 그 목적(Why)을 명확히 제시해 주면 학습 효율이 폭발적으로 증가합니다. 훈련 후 개별적인 토의도 도움이 됩니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '훈련에 임하는 태도는 평범하나 목표 설정이나 치밀한 계획성은 다소 부족합니다. 시키는 것은 잘 해내지만 주도적으로 파고드는 면이 부족합니다.',
+                        observation: '훈련 설명을 완벽히 이해하는 데 시간이 다소 걸립니다. 실수를 했을 때 원인을 생각하기보다 일단 몸으로 다시 부딪혀 보려는 단순한 성향이 강합니다.',
+                        checkpoints: ['훈련 목적에 대한 이해 속도 저하', '동일한 실수 반복 여부 및 수정 의지'],
+                        guide: '명확하고 달성하기 쉬운 아주 작은 단기 목표(예: "오늘은 퍼스트 터치 한 방향만 연습하자")를 주어 성취감을 느끼게 하세요. 훈련 노트 작성을 유도해 보세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '훈련의 계획성과 자기 관리 능력이 현저히 부족합니다. 훈련 목표를 스스로 설정하지 못하고, 외부의 지시에 맹목적으로 의존하여 수행합니다.',
+                        observation: '훈련 설명을 건성으로 듣거나 잘못 이해한 채 실행합니다. 실수가 발생해도 원인 분석 없이 똑같은 패턴의 잘못된 동작을 무의식적으로 계속 반복합니다.',
+                        checkpoints: ['훈련 설명 시 집중을 못 하는 모습', '지시와 전혀 다른 동작 수행 및 무반성'],
+                        guide: '복잡한 과제나 자유도를 주면 훈련의 방향을 잃어버립니다. 하나의 행동 단위로 훈련을 아주 잘게 쪼개어 단계별로 반복 숙달시키는 구조화 코칭이 필수입니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '훈련 자기관리 능력이 백지상태에 가깝습니다. 훈련의 의미조차 파악하지 못하고 육체적 시간만 때우려는 방관 상태일 확률이 높습니다.',
+                        observation: '신체적 기량이 뛰어나다 해도 지능적, 전술적 발전이 거의 이루어지지 않습니다. 매번 같은 지적을 받아도 수정 의지나 방법론을 찾지 못해 항상 제자리걸음입니다.',
+                        checkpoints: ['훈련 내용 망각의 일상화', '교정 지시에 대한 개선율 0%', '극도로 수동적이고 나태한 태도'],
+                        guide: '1:1 밀착 코칭이 요구됩니다. 수시로 "지금 뭘 연습하고 있지?"라고 질문을 던져 선수의 뇌를 자극해야 하며, 아주 사소한 성취 하나부터 다시 차곡차곡 쌓아 올려야 합니다.'
+                    }
+                ]
+            },
+            {
+                id: 'add_5',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-brain',
+                title: '심상훈련 활용 지수',
+                subtitle: '이미지 트레이닝 및 상황 사전 대비력',
+                meaning: '실제 몸을 움직이기 전, 머릿속으로 플레이를 생생하게 그리며 전술과 기술을 미리 연습하는 "보이지 않는" 멘탈 리허설 능력을 의미합니다.',
+                struggle: ['아예 새롭고 복잡한 기술이나 전술을 처음 배울 때', '경기 상황을 미리 짐작하거나 상상하지 않고 그라운드에 나설 때', '기술의 원리를 생각하지 않고 기계처럼 횟수만 반복할 때'],
+                solution: ['중요한 시합 전 내가 멋지게 골을 넣거나 훌륭하게 방어하는 좋은 플레이 장면 생생하게 떠올리기', '몸으로 연습하기 전, 머릿속으로 완벽한 내 동작 그려보기', '잠자리에 누워 천장을 보며 내일 할 훈련 내용 시뮬레이션 하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수는 경기 상황을 머릿속에서 미리 명확하게 그려보고 준비하는 탁월한 능력을 갖추었습니다. 이 능력이 기술 습득과 전술 이해 속도를 놀랍게 단축시킵니다.',
+                        observation: '훈련 설명만 듣고도 머릿속에서 플레이를 시뮬레이션하여 실제 동작으로 빠르게 적용합니다. 실전에서도 상황을 미리 예측하여 한발 앞선 위치를 선점하는 모습이 자주 보입니다.',
+                        checkpoints: ['전술 훈련 설명 이후 실제 플레이 적용 속도', '경기 중 공 없는 오프더볼 상황에서의 우수한 위치 선정'],
+                        guide: '훈련 전, 특정 상황을 제시하고 "이럴 땐 어떻게 움직일래?"라며 상황 시뮬레이션을 적극적으로 유도하는 질문이 매우 효과적입니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '심상 훈련의 가치를 이해하고 어느 정도 적극적으로 활용하고 있습니다. 기본적인 전술이나 플레이 장면을 머릿속으로 그리는 데 무리가 없습니다.',
+                        observation: '코치의 전술 지시를 들으며 눈빛이 반짝이고 머릿속으로 정리하는 태도가 보입니다. 새로운 훈련 과제도 조금만 시범을 보여주면 빠르게 자기 것으로 만듭니다.',
+                        checkpoints: ['새로운 패턴 훈련 시의 적응 속도', '전술 지시 사항의 정확한 이행 여부'],
+                        guide: '시각화 능력이 좋으므로, 훈련 전 화이트보드 설명이나 모범적인 선수 영상 자료를 적극 활용하면 심상 훈련 효과를 더욱 극대화할 수 있습니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '심상 훈련을 생활화하지 못하고 제한적으로만 활용합니다. 구체적으로 생각하기보다는 반복적인 몸놀림을 통해 근육 기억에만 의존하려는 경향이 강합니다.',
+                        observation: '훈련 설명만으로는 부족하고 반복해서 몸으로 부딪쳐 봐야 비로소 이해합니다. 낯선 전술 상황에 부닥치면 머뭇거리거나 판단력이 일시적으로 저하됩니다.',
+                        checkpoints: ['복잡한 전술 훈련에서의 혼란 빈도', '몸이 먼저 반응하는 반사적인 플레이 빈도'],
+                        guide: '말이나 그림보다는 부분적인 상황을 끊어서 직접 시연하고 설명하는 방식이 낫습니다. "지금 동작을 머릿속으로 한 번만 그려봐"라고 직접적으로 권유해 주세요.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '경기 상황을 머릿속으로 구상하는 시각화 능력이 매우 부족합니다. 생각 없이 몸만 움직이다 보니 훈련 효율이 극히 떨어지고 전술 이해도가 낮습니다.',
+                        observation: '훈련 과제를 수행할 때 아무 생각 없이 횟수 채우기에만 급급합니다. 전술 지시를 하면 상황을 상상하지 못하고 멍한 표정을 지으며 이해에 큰 어려움을 보입니다.',
+                        checkpoints: ['전술 이해도 저하 및 판단력 부재', '생각 없이 플레이를 기계적으로 남발하는 모습'],
+                        guide: '복잡한 플레이 구조를 요구하면 멘탈이 정지합니다. 훈련 상황을 가장 단순하고 짧은 1~2단계로 쪼개어 눈앞에서 보여주고 그대로 따라 하게 만들어야 합니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '심상 훈련에 대한 개념 자체가 전혀 없으며, 전술 이해나 예측 플레이가 불가능에 가까운 심각한 상태입니다. 본능에만 의존하여 축구를 합니다.',
+                        observation: '경기 상황에 대한 예측력이 완전히 결여되어 있어, 볼이 내 발밑에 와야만 그제야 반응합니다. 아무리 설명해도 전술적 지능이 발달하지 않는 모습을 보입니다.',
+                        checkpoints: ['심각한 템포 저하 및 예측 플레이 부재', '반복적인 전술적 판단 미스 발생'],
+                        guide: '훈련장 밖에서 멘탈 코칭의 개입이 필요합니다. 눈을 감고 아주 단순한 킥 동작 하나부터 천천히 머릿속에 상상해보는 기초적인 이미지 트레이닝 기초 과정부터 시작해야 합니다.'
+                    }
+                ]
+            },
+            {
+                id: 'add_6',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-handshake',
+                title: '주위 적응력 지수',
+                subtitle: '환경 변화 대처 및 팀 유대감 형성',
+                meaning: '새로운 팀 환경, 낯선 동료, 낯선 전술 지시가 주어졌을 때 당황하지 않고 조화롭게 적응하며, 필요시 원활히 도움을 주고받는 능력을 뜻합니다.',
+                struggle: ['팀 훈련에서 혼자 소외된다고 느껴질 때', '모르는 것이 있어도 주위의 시선 때문에 묻기 망설여질 때', '새로운 포지션이나 전술을 요구받아 혼란스러울 때'],
+                solution: ['훈련장에 들어서며 팀 친구들과 코치님께 활기차게 먼저 인사 건네기', '훈련 내용이 이해되지 않으면 부끄러워 말고 당당히 코치님께 질문하기', '동료의 좋은 플레이에 엄지를 치켜세우며 감정 공유하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '새로운 환경이나 낯선 전술 변화 앞에서도 당황하지 않고 스펀지처럼 유연하게 적응하는 능력이 매우 뛰어납니다. 팀의 윤활유 같은 존재입니다.',
+                        observation: '포지션이나 파트너가 바뀌어도 어색함 없이 바로 본인의 역할을 찾아 수행합니다. 동료들과의 대화와 스킨십이 원활하며 친화력이 높아 팀 전력 상승에 도움을 줍니다.',
+                        checkpoints: ['포지션 및 훈련 조 변경 이후의 흔들림 없는 플레이 안정성', '동료들을 독려하고 이끄는 유대감 형성 행동'],
+                        guide: '선수의 뛰어난 적응력을 활용하여 다양한 전술 훈련과 멀티 포지션을 경험하게 해주세요. 팀 내 갈등 상황 발생 시 이 선수를 중재자나 연결 고리로 활용하는 것도 좋습니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대체로 긍정적인 성향으로 팀 환경이나 약간의 전술 변화에 안정적으로 잘 적응합니다. 팀 훈련을 묵묵히 잘 따라오는 유형입니다.',
+                        observation: '변화가 생겼을 때 초기에는 조심스럽지만 어느 정도 적응할 시간이 주어지면 이내 제 몫을 해냅니다. 동료들과 두루두루 모난 곳 없이 잘 어울립니다.',
+                        checkpoints: ['전술이나 환경 변화 직후 일정 시간 후의 안정감 획득 여부', '동료들과의 무난한 상호작용 및 소통 빈도'],
+                        guide: '변화를 줄 때는 선수가 당황하지 않도록 전술 변경의 이유와 목표를 사전에 충분히 설명해 주어 심리적 안정감을 깔아준 뒤 적응하도록 배려해 주면 좋습니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '새로운 환경이나 낯선 지시에 적응하는 데 남들보다 다소 시간이 필요합니다. 익숙한 루틴을 선호하며 변화를 달가워하지 않는 경향이 있습니다.',
+                        observation: '포지션 변화 등 낯선 환경에 놓이면 플레이 이해가 늦어지고 잔실수가 발생합니다. 훈련 시 익숙하고 친한 특정 동료하고만 패스를 주고받거나 어울리려는 좁은 관계망을 가집니다.',
+                        checkpoints: ['낯선 전술이나 포지션에서의 잦은 판단 미스 여부', '특정 소규모 무리에만 머물려는 배타적 태도'],
+                        guide: '훈련 목표를 명확하고 쉽게 설명하여 불안감을 낮춰주는 것이 중요합니다. 훈련 그룹(조)을 정기적이고 의도적으로 뒤섞어 다양한 동료들과의 교류를 억지로라도 늘려야 합니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '새로운 환경이나 조그마한 변화에도 강한 불안감이나 어려움을 느낍니다. 이로 인해 팀 훈련에 온전히 몰입하지 못하고 겉도는 소극적 상태입니다.',
+                        observation: '전술 변화나 낯선 요구가 있으면 극도로 위축되어 포지션 이탈이나 플레이 안정성 저하가 눈에 띄게 나타납니다. 훈련 중 도움을 주고받는 의사소통이 거의 단절되어 있습니다.',
+                        checkpoints: ['전술 변화 이후의 극심한 플레이 참여 기피 및 감소', '팀 내 고립감 호소 및 교우 관계 갈등 조짐'],
+                        guide: '복잡한 멀티 포지션 요구는 독이 됩니다. 선수가 가장 자신 있어 하는 익숙하고 단순한 역할부터 수행하게 하여 자신감을 채워준 뒤, 아주 천천히 단계적으로 역할을 넓혀주세요.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '팀 환경 변화에 대한 스트레스가 극에 달해 있으며 극심한 사회적 고립 상태일 가능성이 높습니다. 선수 생활 이탈(Dropout)의 강력한 위험 신호입니다.',
+                        observation: '훈련 참여 자체를 극도로 꺼리거나 벤치 구석에 혼자 머뭅니다. 동료들과 눈도 마주치지 않으며 전술 변화 시 지시를 아예 이행하지 못하고 포기하는 태도를 보입니다.',
+                        checkpoints: ['극심한 훈련 소외 및 왕따 징후 여부', '의사소통의 완벽한 단절 및 무표정한 태도 유지'],
+                        guide: '운동장 내에서의 코칭만으로는 해결이 불가능합니다. 선수와의 심층 면담을 통해 심리적 장애물이나 팀 내 껄끄러운 문제를 찾아내고, 심리 전문가나 보호자와의 긴밀한 연계가 필요합니다.'
+                    }
+                ]
+            },
+            {
+                id: 'add_7',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-history',
+                title: '실패 회복력 지수',
+                subtitle: '실수 및 좌절 극복의 탄력성',
+                meaning: '연습이나 시합 중 뼈아픈 실수나 크나큰 실패를 겪었을 때, 좌절감을 짧게 털어내고 오뚝이처럼 다시 도전하여 본래의 플레이로 씩씩하게 돌아오는 멘탈 회복 탄력성(Resilience)입니다.',
+                struggle: ['결정적인 찬스를 놓쳐버려 자책감이 밀려올 때', '경기 흐름이 전혀 풀리지 않고 상대에게 압도당할 때', '실수한 장면이 자꾸만 머릿속에 리플레이되며 괴롭힐 때'],
+                solution: ['실수 후 손뼉 한 번 크게 치며 "잊어버리고 다음 플레이!" 스스로 외치기', '지난 실수는 접어두고 당장 내 눈앞의 공 움직임에만 100% 집중하기', '성공하지 못한 플레이를 다음 연습의 동기부여 목표로 긍정적으로 바꾸기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '뼈아픈 실수나 실패를 마주해도 절대 주저앉지 않고 즉시 훌훌 털어버립니다. 오히려 실패를 발판 삼아 다음 플레이에 더욱 독하게 집중하는 타고난 회복력을 지녔습니다.',
+                        observation: '패스 미스나 실점의 원인을 제공한 직후에도 멘탈이 꺾이지 않고 바로 다음 플레이에 악착같이 뛰어듭니다. 실패 상황에서도 기죽지 않고 벤치나 동료에게 당당하게 공을 요구합니다.',
+                        checkpoints: ['치명적 실수 직후의 즉각적인 수비 가담 속도', '기죽지 않는 표정과 지속적인 패스 요구 움직임 유지'],
+                        guide: '선수의 흔들림 없는 당당한 플레이를 팀 전체 훈련 중에 아낌없이 칭찬하여 팀의 회복력 롤모델로 삼아 주세요. 더 과감한 도전을 지속하도록 무한한 지지를 보내면 더욱 훌륭히 성장합니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대체로 안정적인 회복 탄력성을 지니고 있습니다. 일반적인 실패 상황 이후 스스로 마음을 추스르고 다시 경기에 몰입할 수 있는 준수한 멘탈을 가졌습니다.',
+                        observation: '실수 직후 잠시 아쉬워하며 플레이 리듬이 둔탁해질 수는 있으나, 치명적이지 않다면 비교적 빠르게 감정을 정리하고 본인의 임무로 복귀하는 든든한 모습을 보입니다.',
+                        checkpoints: ['실수 이후 플레이 본 궤도 복귀에 소요되는 시간 관찰', '실점 등 악조건 속에서의 자신감 유지 상태'],
+                        guide: '실수 이후 복잡하게 생각할 틈을 주지 않도록 "다음 수비 라인 지켜!" 등 구체적이고 명확한 다음 행동 지침을 즉각적으로 외쳐주면 회복 속도가 배가됩니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '실패 이후 멘탈을 온전히 회복하는 데 꽤 긴 물리적 시간이 필요합니다. 실수의 경중이나 경기 흐름의 불리함 정도에 따라 심리적 타격이 고스란히 플레이 기복으로 드러납니다.',
+                        observation: '자신의 실수 이후 눈에 띄게 움직임이 줄어들며, 혹여나 또 실수할까 봐 안전하고 책임을 떠넘기는 소극적인 횡패스 위주의 플레이만 고집하는 경향이 발생합니다.',
+                        checkpoints: ['실수 이후 공격적 침투 및 플레이 적극성 급감 여부', '도전적인 패스 빈도의 눈에 띄는 변화'],
+                        guide: '실수 이후 자책감에 빠지지 않도록 바로 다음 플레이에 관여하도록 유도해야 합니다. 질책보다는 격려가 필요하며, 훈련에서 반복 숙달을 통해 실패 상황 자체에 무뎌지게 만들어야 합니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '실수에 대한 두려움과 집착이 매우 강해, 단 한 번의 실패로도 멘탈이 크게 무너져 내리며 경기 내내 플레이 자신감이 바닥으로 떨어질 위험을 안고 있습니다.',
+                        observation: '실수 직후 동료의 눈치를 살피느라 바쁘며, 공을 적극적으로 받으려는 움직임이 실종됩니다. 수비 시 몸싸움마저 기피하며 자신감이 푹 꺼진 소극적 모습이 역력합니다.',
+                        checkpoints: ['실수 이후 플레이 회피 및 고립되는 행동 증가', '자신감 하락으로 인한 소극적인 움직임 변화 관찰'],
+                        guide: '훈련 환경 자체가 ‘실수를 허용하는 분위기’로 조성되는 것이 무엇보다 중요합니다. 실수를 범하더라도 즉각적으로 작은 성공 경험을 안겨주어 자신감의 완전한 붕괴를 막아주세요.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '실패 이후 자력으로 멘탈을 수습할 능력이 전무하며, 작은 실수 하나가 남은 경기 전체를 망쳐버리는 심각한 멘탈 붕괴(Choking) 현상이 예견되는 위태로운 상태입니다.',
+                        observation: '실수 이후 과도한 자책감으로 인해 플레이 위축을 넘어 연쇄적인 연속 실수를 범하는 악순환에 빠집니다. 눈빛에 자신감이 사라지고 코트 위에서 길을 잃은 듯 방황합니다.',
+                        checkpoints: ['실수 이후 경기 템포 적응 실패 및 투명인간화', '연쇄적인 폼 하락 및 급격한 기량 상실 여부'],
+                        guide: '경기 중이라면 잠시 교체를 통해 코트 밖으로 불러내어 심리적 환기 시간을 주는 것이 현명합니다. 평소 훈련에서는 강한 압박이나 질책을 배제하고, 실패에 대한 두려움의 근본 원인을 파악하는 멘탈 치유가 급선무입니다.'
+                    }
+                ]
+            },
+            {
+                id: 'add_8',
+                category: 'additional',
+                badge: '추가 지수',
+                icon: 'fa-running',
+                title: '훈련 태도 지수',
+                subtitle: '훈련 참여의 성실성과 노력 지속성',
+                meaning: '훈련이 육체적으로 힘들고 고될 때에도 불평 없이 집중력을 발휘하며, 꾀를 부리지 않고 꾸준하게 자기 관리를 유지하는 훈련 습관이자 성실도의 척도입니다.',
+                struggle: ['고강도 체력 훈련이 반복되어 육체적으로 너무 지치고 힘들 때', '단순하고 똑같은 기본기 훈련이 이어져 집중력이 바닥나려 할 때', '코치님이 보지 않을 때 적당히 쉬어가고 싶은 마음이 굴뚝같을 때'],
+                solution: ['훈련장 들어서기 전 마음속으로 오늘 끝마쳐야 할 명확한 목표 한 가지 새기기', '숨이 턱 끝까지 차오를 때 스스로 "딱 한 번만 더!" 긍정적인 자기 암시 걸기', '오늘 훈련을 마치고 땀 흘린 내 모습을 보며 작은 성취감 칭찬하기'],
+                tiers: [
+                    {
+                        range: '5.0 – 6.0', label: '강점',
+                        interpretation: '선수의 훈련 참여 태도와 땀방울의 순도가 매우 우수합니다. 누구의 감시 없이도 스스로 높은 수준의 훈련 몰입도를 유지하는 모범적인 워크에식(Work Ethic)을 자랑합니다.',
+                        observation: '훈련 시작 호각이 울릴 때부터 끝날 때까지 흐트러짐 없는 고도의 집중 상태를 보입니다. 단조롭고 고된 반복 체력 훈련에서도 요령 피우지 않고 최선을 다하는 진정성이 돋보입니다.',
+                        checkpoints: ['장시간 훈련에도 유지되는 뛰어난 집중 지속 시간', '코치의 시선이 없는 상태에서도 묵묵히 땀 흘리는 노력의 수준'],
+                        guide: '선수의 훌륭한 내적 동기를 믿고 개인 훈련 목표를 스스로 설정하게끔 재량권을 부여해 주세요. 모범적인 훈련 태도를 팀원들 앞에서 은근히 치켜세워 자부심을 심어주는 것도 탁월한 동기부여가 됩니다.'
+                    },
+                    {
+                        range: '4.3 – 4.9', label: '양호',
+                        interpretation: '대체로 흐트러짐 없이 훌륭한 훈련 태도를 꾸준하게 유지하고 있습니다. 주어진 과제에 불만 없이 성실하게 임하는 신뢰할 수 있는 훈련 파트너입니다.',
+                        observation: '훈련에 돌입하면 기본 이상의 집중력을 발휘하며 성실히 소화합니다. 다만 몸이 심하게 무겁거나 지루한 세션이 길어질 때면 막바지에 미세하게 집중력이 흐려지기도 합니다.',
+                        checkpoints: ['기본적인 훈련 참여의 성실함과 진지한 태도 유지', '체력 고갈 시점의 훈련 집중도 곡선 변화'],
+                        guide: '선수가 지치지 않도록 훈련의 명확한 목표 지점을 반복해서 상기시켜 주면 집중력 유지에 큰 도움이 됩니다. 잘 해내고 있음을 적절한 시점에 인정해 주는 칭찬 한마디가 보약이 됩니다.'
+                    },
+                    {
+                        range: '3.6 – 4.2', label: '보통',
+                        interpretation: '평균적인 수준의 훈련 집중도를 보입니다. 훈련의 내용이나 본인의 당일 기분 상태에 따라 훈련에 몰입하는 정도가 고무줄처럼 변동성을 띱니다.',
+                        observation: '재미있는 게임성 훈련에서는 눈을 반짝이지만, 힘들고 지루한 체력 훈련이나 기본기 훈련에서는 집중력이 급격히 떨어지며 딴청을 피우는 모습이 수시로 관찰됩니다.',
+                        checkpoints: ['훈련 종목 성격에 따른 극심한 집중력 기복 현상', '힘든 훈련 시 노골적으로 드러나는 태만함 여부'],
+                        guide: '막연하고 긴 훈련보다는 훈련 과제를 짧은 단계로 쪼개어 단계마다 성취감을 유발해 주는 것이 좋습니다. 지루할 틈을 주지 않는 속도감 있는 훈련 전환이 몰입도를 끌어올리는 비결입니다.'
+                    },
+                    {
+                        range: '3.0 – 3.5', label: '주의',
+                        interpretation: '훈련에 온전히 몰입하지 못하고 주의력이 자주 흩어집니다. 훈련 참여 태도가 고르지 못해 전체적인 팀 훈련 분위기마저 흐릴 수 있는 주의 대상입니다.',
+                        observation: '훈련 중 잦은 잡담으로 집중을 잃거나 코치가 지켜볼 때만 열심히 하는 시늉을 냅니다. 고된 훈련은 어떻게든 요령을 피워 대충 넘기려 하며 훈련의 능률이 심하게 저하되어 있습니다.',
+                        checkpoints: ['훈련 중 딴짓 및 집중을 유지하는 절대 시간 확인', '지속적이고 반복적인 태만 또는 태도 불량 변화'],
+                        guide: '추상적인 지시 대신 아주 단순하고 즉각 확인이 가능한 구체적인 행동 과제(예: "이번 왕복 달리기 3초 안에 끊어라")를 던져주는 것이 효과적입니다. 엄격하고 일관된 태도 지도가 동반되어야 합니다.'
+                    },
+                    {
+                        range: '2.9 이하', label: '강화필요',
+                        interpretation: '훈련에 임하는 기본 태도와 마인드셋에 치명적인 결함이 관찰되며 심각한 훈련 지속성 부족을 앓고 있습니다. 성장 동력을 스스로 깎아 먹는 중대한 위험 상태입니다.',
+                        observation: '훈련 자체에 만성적인 피로감이나 지루함을 호소하며, 훈련의 흐름을 번번이 끊어먹습니다. 불성실한 태도가 습관처럼 굳어져 있어 어떠한 긍정적 피드백에도 개선의 의지를 전혀 보이지 않습니다.',
+                        checkpoints: ['만성적인 훈련 태만 및 코치 지시에 대한 불성실한 태도', '집중력 지속 시간의 극단적 부재 및 무기력증'],
+                        guide: '축구 스킬을 가르치기 이전에 선수의 인성과 멘탈을 대대적으로 리모델링해야 합니다. 아주 단순하고 작은 행동 하나라도 제대로 해냈을 때 보상하는 방식으로 밑바닥에서부터 훈련 습관을 완전히 새로 조립해 나가야 합니다.'
+                    }
+                ]
+            }
+        ];
+
+        // --------------------------------------------------------
+        // 2. UI 및 로직 컨트롤
+        // --------------------------------------------------------
+        
+        let currentTab = 'mps_base';
+        let activeModalIndexId = null;
+
+        // 탭 스위칭 함수
+        function switchTab(tabId) {
+            currentTab = tabId;
+            
+            // 탭 스타일 리셋
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active', 'text-slate-800'));
+            const activeEl = document.getElementById(`tab-${tabId}`);
+            activeEl.classList.add('active', 'text-slate-800');
+
+            // 헤더 정보 세팅
+            const headerInfo = {
+                'mps_base': { title: 'MPS 5대 기본 지수', desc: '선수의 가장 핵심이 되는 5가지 기본 멘탈 역량입니다. 이 지수들을 통해 선수의 전반적인 심리적 단단함과 경기 준비 상태를 종합적으로 평가할 수 있습니다.' },
+                'mgi': { title: 'MGI 멘탈 성장 지수', desc: '현재의 실력이 아닌, 미래의 "성장 잠재력"에 초점을 맞춘 지수입니다. 훈련 태도와 압박 관리 능력이 결합되어 엘리트 선수로의 발전 가능성을 예측합니다.' },
+                'additional': { title: '8대 추가 멘탈 지수', desc: '특정 상황(번아웃, 외부 시선 압박, 훈련 태도 등)에 대한 선수의 심리 반응을 더욱 디테일하게 분석한 8가지 심화 지표들입니다.' }
+            };
+
+            const headerContainer = document.getElementById('section-header');
+            headerContainer.classList.remove('fade-in');
+            void headerContainer.offsetWidth; // Reflow
+            headerContainer.classList.add('fade-in');
+            headerContainer.innerHTML = `
+                <h2 class="text-2xl font-extrabold text-slate-800 mb-2">${headerInfo[tabId].title}</h2>
+                <p class="text-slate-500 text-[0.95rem] max-w-3xl leading-relaxed word-keep">${headerInfo[tabId].desc}</p>
+            `;
+
+            // 카드 렌더링
+            const cardsContainer = document.getElementById('cards-grid');
+            cardsContainer.classList.remove('fade-in');
+            void cardsContainer.offsetWidth;
+            cardsContainer.classList.add('fade-in');
+            
+            // 데이터 필터링
+            const filteredData = mentalData.filter(item => item.category === tabId);
+            
+            if (filteredData.length === 0) {
+                cardsContainer.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 border-dashed">
+                        <p class="text-slate-400 font-medium">데이터 업데이트 중입니다.</p>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+            filteredData.forEach(item => {
+                html += `
+                    <div class="index-card bg-white rounded-[1.25rem] p-6 border border-slate-200 flex flex-col h-full cursor-pointer relative overflow-hidden group" onclick="openModal('${item.id}')">
+                        <!-- BG Decoration -->
+                        <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="flex items-start justify-between mb-4 relative z-10">
+                            <span class="px-2.5 py-1 bg-primary-100 text-primary-700 text-[0.7rem] font-extrabold tracking-wider rounded-md">${item.badge}</span>
+                            <div class="icon-box w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center transition-colors">
+                                <i class="fas ${item.icon}"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow relative z-10">
+                            <h3 class="text-xl font-extrabold text-slate-800 mb-1.5">${item.title}</h3>
+                            <p class="text-[0.85rem] font-semibold text-primary-500 mb-3">${item.subtitle}</p>
+                            <p class="text-sm text-slate-500 line-clamp-3 word-keep leading-relaxed">${item.meaning}</p>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between relative z-10 text-slate-400 group-hover:text-primary-500 transition-colors">
+                            <span class="text-sm font-bold">지도 가이드 확인하기</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            cardsContainer.innerHTML = html;
+        }
+
+        // 모달 열기
+        function openModal(id) {
+            const data = mentalData.find(d => d.id === id);
+            if(!data) return;
+            
+            activeModalIndexId = id;
+
+            // 1. 헤더 및 좌측 패널 정보 채우기
+            document.getElementById('modal-category-badge').innerText = data.badge;
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-meaning').innerText = data.meaning;
+            
+            const struggleHtml = data.struggle.map(s => `<li>${s}</li>`).join('');
+            document.getElementById('modal-struggles').innerHTML = struggleHtml;
+            
+            const solutionHtml = data.solution.map(s => `<li>${s}</li>`).join('');
+            document.getElementById('modal-solutions').innerHTML = solutionHtml;
+
+            // 2. 우측 패널 티어(점수 구간) 버튼 생성
+            const tierSelector = document.getElementById('tier-selector');
+            let tierHtml = '';
+            data.tiers.forEach((tier, idx) => {
+                // 디자인 색상 매핑
+                let colorClass = 'text-slate-500';
+                if(idx === 0) colorClass = 'text-blue-500';
+                if(idx === 1) colorClass = 'text-emerald-500';
+                if(idx === 3) colorClass = 'text-orange-500';
+                if(idx === 4) colorClass = 'text-red-500';
+
+                tierHtml += `
+                    <button onclick="selectTier(${idx})" id="tier-btn-${idx}" class="tier-btn bg-white border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center hover:bg-slate-50">
+                        <span class="text-[0.75rem] font-bold text-slate-400 mb-0.5 whitespace-nowrap">${tier.range}</span>
+                        <span class="text-sm font-extrabold ${colorClass}">${tier.label}</span>
+                    </button>
+                `;
+            });
+            tierSelector.innerHTML = tierHtml;
+
+            // 모달 노출 애니메이션
+            document.getElementById('modal-backdrop').classList.add('active');
+            document.getElementById('modal-container').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // 기본 선택: '주의' 단계 (인덱스 3) 또는 '강점' (인덱스 0)
+            selectTier(3);
+        }
+
+        // 티어 선택 시 내용 업데이트
+        function selectTier(idx) {
+            const data = mentalData.find(d => d.id === activeModalIndexId);
+            if(!data || !data.tiers[idx]) return;
+
+            // 버튼 스타일 업데이트
+            document.querySelectorAll('.tier-btn').forEach((btn, i) => {
+                if(i === idx) {
+                    btn.classList.add('active');
+                    btn.classList.remove('bg-white', 'text-slate-500');
+                    // 내부 텍스트 색상 오버라이드
+                    btn.querySelectorAll('span').forEach(s => s.classList.replace(s.className.match(/text-\w+-500/)?.[0] || 'tmp', 'text-white'));
+                    btn.querySelectorAll('span').forEach(s => s.classList.replace('text-slate-400', 'text-sky-100'));
+                } else {
+                    btn.classList.remove('active');
+                    btn.classList.add('bg-white');
+                    // 원래 색상 복원 트릭 (단순화를 위해 클래스 리셋)
+                    const labelSpan = btn.querySelectorAll('span')[1];
+                    labelSpan.className = 'text-sm font-extrabold';
+                    if(i===0) labelSpan.classList.add('text-blue-500');
+                    else if(i===1) labelSpan.classList.add('text-emerald-500');
+                    else if(i===2) labelSpan.classList.add('text-slate-500');
+                    else if(i===3) labelSpan.classList.add('text-orange-500');
+                    else if(i===4) labelSpan.classList.add('text-red-500');
+                    
+                    btn.querySelectorAll('span')[0].classList.replace('text-sky-100', 'text-slate-400');
+                }
+            });
+
+            const tier = data.tiers[idx];
+            const contentContainer = document.getElementById('tier-content-container');
+            
+            // 페이드 효과 트릭
+            contentContainer.style.opacity = 0;
+            
+            setTimeout(() => {
+                contentContainer.innerHTML = `
+                    <div class="mb-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-1.5 h-4 bg-primary-500 rounded-full"></div>
+                            <h4 class="text-sm font-extrabold text-slate-800">코치님 해석 (지표의 의미)</h4>
+                        </div>
+                        <p class="text-slate-600 text-[0.95rem] leading-relaxed word-keep pl-3.5 border-l-2 border-slate-100">${tier.interpretation}</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-1.5 h-4 bg-indigo-500 rounded-full"></div>
+                            <h4 class="text-sm font-extrabold text-slate-800">경기 및 훈련에서 나타나는 실제 모습</h4>
+                        </div>
+                        <p class="text-slate-600 text-[0.95rem] leading-relaxed word-keep pl-3.5 border-l-2 border-slate-100">${tier.observation}</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-1.5 h-4 bg-orange-500 rounded-full"></div>
+                            <h4 class="text-sm font-extrabold text-slate-800">코치님 관찰 체크포인트</h4>
+                        </div>
+                        <ul class="bullet-list text-slate-600 text-[0.95rem] pl-3.5 border-l-2 border-slate-100 space-y-1">
+                            ${tier.checkpoints.map(cp => `<li>${cp}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="p-5 bg-slate-850 rounded-xl shadow-inner mt-4 border border-slate-800 relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 text-slate-700 opacity-30">
+                            <i class="fas fa-quote-right text-6xl"></i>
+                        </div>
+                        <div class="flex items-center gap-2 mb-3 relative z-10">
+                            <i class="fas fa-clipboard-check text-primary-400 text-lg"></i>
+                            <h4 class="text-sm font-extrabold text-white">맞춤형 코칭 가이드</h4>
+                        </div>
+                        <p class="text-slate-300 text-[0.95rem] leading-relaxed word-keep relative z-10">${tier.guide}</p>
+                    </div>
+                `;
+                contentContainer.style.opacity = 1;
+                contentContainer.style.transition = 'opacity 0.3s ease';
+            }, 100);
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.remove('active');
+            document.getElementById('modal-container').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 초기화
+        window.onload = () => {
+            switchTab('mps_base');
+        };
+    </script>
+</body>
+</html>
